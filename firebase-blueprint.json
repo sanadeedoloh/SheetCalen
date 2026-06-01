@@ -1,0 +1,124 @@
+{
+  "entities": {
+    "Config": {
+      "title": "System Configuration",
+      "description": "App settings like Google Apps Script Web App URL",
+      "type": "object",
+      "properties": {
+        "appsScriptUrl": {
+          "type": "string",
+          "description": "Google Apps Script webhook URL"
+        }
+      },
+      "required": ["appsScriptUrl"]
+    },
+    "CalendarState": {
+      "title": "Calendar State",
+      "description": "Stores current list of live calendar events",
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "description": "A list of calendar events"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "Timestamp of the last sync"
+        }
+      },
+      "required": ["events", "lastUpdated"]
+    },
+    "DeviceSubscription": {
+      "title": "Device Notification Subscription",
+      "description": "User subscription settings for specific tech coordinators to receive notifications on their device",
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "Unique identifier of the registered browser/device"
+        },
+        "selectedTechs": {
+          "type": "array",
+          "description": "List of tech names subscribed to by this device"
+        },
+        "enableMobilePush": {
+          "type": "boolean",
+          "description": "Whether notification is active on this device"
+        },
+        "deviceName": {
+          "type": "string",
+          "description": "User-defined name or details of the device"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "ISO timestamp of the last configuration"
+        }
+      },
+      "required": ["deviceId", "selectedTechs", "enableMobilePush", "lastUpdated"]
+    },
+    "SchedulerState": {
+      "title": "Scheduler State and Activity Logs",
+      "description": "Logs and heartbeat configuration of the server-side cron scheduler service",
+      "type": "object",
+      "properties": {
+        "activityLogs": {
+          "type": "array",
+          "description": "A list of server logs"
+        },
+        "lastCheck": {
+          "type": "string",
+          "description": "Timestamp of the last scheduler check"
+        }
+      },
+      "required": ["activityLogs", "lastCheck"]
+    },
+    "Alert": {
+      "title": "Pushed Alert",
+      "description": "Pushed live reminder notifications intended for a specific subscribed device",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "eventKol": {
+          "type": "string"
+        },
+        "matchedTechs": {
+          "type": "array"
+        }
+      },
+      "required": ["id", "title", "body", "timestamp"]
+    }
+  },
+  "firestore": {
+    "artifacts/{appId}/public/data/settings/config": {
+      "schema": "Config",
+      "description": "Configuration for the Shopee Live Ops App"
+    },
+    "artifacts/{appId}/public/data/live_calendar/state": {
+      "schema": "CalendarState",
+      "description": "The current state of calendar events synced from sheets"
+    },
+    "artifacts/{appId}/subscriptions/{deviceId}": {
+      "schema": "DeviceSubscription",
+      "description": "Notification settings for a specific device subscribed to tech calendars"
+    },
+    "artifacts/{appId}/scheduler/state": {
+      "schema": "SchedulerState",
+      "description": "Real-time records, heartbeat, and diagnostics of the backend scheduler"
+    },
+    "artifacts/{appId}/subscriptions/{deviceId}/alerts/{alertId}": {
+      "schema": "Alert",
+      "description": "Alert signals dispatched and triggered by the backend scheduler for a target device"
+    }
+  }
+}
